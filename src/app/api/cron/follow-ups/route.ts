@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 import { sendSms } from '@/lib/twilio'
 
 const DEMO_BUSINESS = { id: 'demo-001', name: 'Demo Roofing Co.', phone: '+15551234567' }
@@ -76,7 +76,7 @@ export async function GET() {
 
       if (smsSent) {
         // Log the outbound text
-        await supabase.from('texts').insert({
+        await getSupabase().from('texts').insert({
           lead_id: lead.id,
           direction: 'outbound',
           body: expectedMessage,

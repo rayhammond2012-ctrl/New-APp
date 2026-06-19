@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 import { sendSms } from '@/lib/twilio'
 
 // Demo business (no auth yet)
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     await sendSms(phone, instantMessage)
 
     // Log the outbound text
-    await supabase.from('texts').insert({
+    await getSupabase().from('texts').insert({
       lead_id: lead.id,
       direction: 'outbound',
       body: instantMessage,
