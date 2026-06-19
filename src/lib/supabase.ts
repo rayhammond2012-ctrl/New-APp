@@ -1,5 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 let client: SupabaseClient | null = null
 
@@ -8,17 +7,20 @@ export function getSupabaseClient(): SupabaseClient {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
     if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Supabase credentials are not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your environment.')
+      throw new Error('Supabase credentials are not configured.')
     }
     client = createClient(supabaseUrl, supabaseKey)
   }
   return client
 }
 
-// Re-export a convenience reference that throws at call-time, not import-time
-export const supabase = new Proxy({} as SupabaseClient, {
-  get(_target, prop) {
+export const supabase = new Proxy<SupabaseClient>({} as SupabaseClient, {
+  get(_, prop) {
     const c = getSupabaseClient()
-    return (c as any)[prop]
+    const val = (c as any)[prop]
+    if (typeof val === 'function') {
+      return val.bind(c)
+    }
+    return val
   },
 })
