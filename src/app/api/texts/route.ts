@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSupabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/getSupabase()'
 
 // GET /api/texts?leadId=xxx — get message history for a lead
 export async function GET(request: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const { data: texts, error } = await supabase
+    const { data: texts, error } = await getSupabase()
       .from('texts')
       .select('*')
       .eq('lead_id', leadId)

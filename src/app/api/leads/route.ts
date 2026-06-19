@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSupabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/getSupabase()'
 import { sendSms } from '@/lib/twilio'
 
 // Demo business (no auth yet)
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const id = searchParams.get('id')
 
     if (id) {
-      const { data: lead, error } = await supabase
+      const { data: lead, error } = await getSupabase()
         .from('leads')
         .select('*')
         .eq('id', id)
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ lead })
     }
 
-    const { data: leads, error } = await supabase
+    const { data: leads, error } = await getSupabase()
       .from('leads')
       .select('*')
       .eq('business_id', DEMO_BUSINESS.id)
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the lead in Supabase
-    const { data: lead, error } = await supabase
+    const { data: lead, error } = await getSupabase()
       .from('leads')
       .insert({
         business_id: DEMO_BUSINESS.id,
@@ -101,7 +101,7 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const { data: lead, error } = await supabase
+    const { data: lead, error } = await getSupabase()
       .from('leads')
       .update({ status, updated_at: new Date().toISOString() })
       .eq('id', id)

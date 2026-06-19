@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getSupabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/getSupabase()'
 import { sendSms } from '@/lib/twilio'
 
 const DEMO_BUSINESS = { id: 'demo-001', name: 'Demo Roofing Co.', phone: '+15551234567' }
@@ -15,7 +15,7 @@ export async function GET() {
     const results: { leadId: string; name: string; day: number; sent: boolean; error?: string }[] = []
 
     // Fetch all non-booked leads for the demo business
-    const { data: leads, error } = await supabase
+    const { data: leads, error } = await getSupabase()
       .from('leads')
       .select('*')
       .eq('business_id', DEMO_BUSINESS.id)
@@ -48,7 +48,7 @@ export async function GET() {
       }
 
       // Check if this follow-up message was already sent for this day
-      const { data: existingTexts } = await supabase
+      const { data: existingTexts } = await getSupabase()
         .from('texts')
         .select('body')
         .eq('lead_id', lead.id)
@@ -83,7 +83,7 @@ export async function GET() {
         })
 
         // Update lead status to 'contacted'
-        await supabase
+        await getSupabase()
           .from('leads')
           .update({ status: 'contacted', updated_at: new Date().toISOString() })
           .eq('id', lead.id)

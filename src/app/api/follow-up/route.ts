@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateFollowUp } from '@/lib/openai'
-import { getSupabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/getSupabase()'
 
 // POST /api/follow-up — generate an AI follow-up message
 export async function POST(request: NextRequest) {
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get previous messages for context
-    const { data: texts } = await supabase
+    const { data: texts } = await getSupabase()
       .from('texts')
       .select('body, direction')
       .eq('lead_id', leadId)
