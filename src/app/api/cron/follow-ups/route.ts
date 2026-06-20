@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getSupabase } from '@/lib/getSupabase()'
+import { getSupabase } from '@/lib/supabase'
 import { sendSms } from '@/lib/twilio'
 
 const DEMO_BUSINESS = { id: 'demo-001', name: 'Demo Roofing Co.', phone: '+15551234567' }

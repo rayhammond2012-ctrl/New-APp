@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateFollowUp } from '@/lib/openai'
-import { getSupabase } from '@/lib/getSupabase()'
+import { getSupabase } from '@/lib/supabase'
 
 // POST /api/follow-up — generate an AI follow-up message
 export async function POST(request: NextRequest) {

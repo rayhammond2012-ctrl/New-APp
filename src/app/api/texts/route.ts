@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSupabase } from '@/lib/getSupabase()'
+import { getSupabase } from '@/lib/supabase'
 
 // GET /api/texts?leadId=xxx — get message history for a lead
 export async function GET(request: NextRequest) {
